@@ -1,0 +1,113 @@
+openapi: 3.0.1
+info:
+  title: meli-bff
+  description: BFF en NodeJS para Test MeLi
+  version: 1.0.0
+servers:
+  - url: /api/v1
+tags:
+  - name: Items
+    description: MercadoLibre example endpoitrs
+  - name: Examples
+    description: Simple example endpoints
+  - name: Specification
+    description: The swagger API specification
+paths:
+  /items:
+    get:
+      tags:
+        - Items
+      description: Query for results
+      parameters:
+        - name: q
+          in: query
+          description: The search keyword
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Returns all results
+          content: {}
+        404:
+          description: No results found
+          content: {}
+  /items/{id}:
+    get:
+      tags:
+        - Items
+      parameters:
+        - name: id
+          in: path
+          description: The id of the item to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Return the item with the specified id
+          content: {}
+        204:
+          description: Item not found
+          content: {}
+  /examples:
+    get:
+      tags:
+        - Examples
+      description: Fetch all examples
+      responses:
+        200:
+          description: Returns all examples
+          content: {}
+    post:
+      tags:
+        - Examples
+      description: Create a new example
+      requestBody:
+        description: an example
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleBody'
+        required: true
+      responses:
+        200:
+          description: Returns all examples
+          content: {}
+  /examples/{id}:
+    get:
+      tags:
+        - Examples
+      parameters:
+        - name: id
+          in: path
+          description: The id of the example to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Return the example with the specified id
+          content: {}
+        404:
+          description: Example not found
+          content: {}
+  /spec:
+    get:
+      tags:
+        - Specification
+      responses:
+        200:
+          description: Return the API specification
+          content: {}
+components:
+  schemas:
+    ExampleBody:
+      title: example
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: no_stress
