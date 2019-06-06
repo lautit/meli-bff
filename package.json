@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node dist/index.js",
 		"compile": "babel server --out-dir dist --delete-dir-on-start --source-maps inline --copy-files",
-		"dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty",
+		"dev": "nodemon server --exec babel-node --config .nodemonrc.json | pino-pretty -c -f -t",
 		"dev:debug": "nodemon --inspect server --exec babel-node --config .nodemonrc.json | pino-pretty",
 		"test": "mocha --require @babel/register --exit",
 		"test:debug": "mocha --require @babel/register --inspect-brk --exit",
@@ -21,6 +21,7 @@
 		"dotenv": "^7.0.0",
 		"express": "^4.16.4",
 		"express-openapi-validator": "^0.53.3",
+		"express-pino-logger": "^4.0.0",
 		"pino": "^5.12.2"
 	},
 	"devDependencies": {

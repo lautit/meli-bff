@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import { OpenApiValidator } from 'express-openapi-validator';
+import pino from 'express-pino-logger';
 import errorHandler from '../api/middlewares/error.handler';
 
 import l from './logger';
@@ -18,6 +19,7 @@ export default class ExpressServer {
     const root = path.normalize(`${__dirname}/../..`);
     app.set('appPath', `${root}client`);
     app.use(cors());
+    app.use(pino(l));
     app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(bodyParser.urlencoded({ extended: true, limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(cookieParser(process.env.SESSION_SECRET));
@@ -40,7 +42,7 @@ export default class ExpressServer {
   listen(port = process.env.PORT) {
     const welcome = p => () => l.info(
       `up and running in ${process.env.NODE_ENV
-					|| 'development'} @: ${os.hostname()} on port: ${p}}`,
+					|| 'development'} @: ${os.hostname()} on port: ${p}`,
     );
     http.createServer(app).listen(port, welcome(port));
     return app;

@@ -1,20 +1,18 @@
 openapi: 3.0.1
 info:
   title: meli-bff
-  description: BFF en NodeJS para Test MeLi
+  description: BFF en NodeJS para Test de MercadoLibre
   version: 1.0.0
 servers:
   - url: /api/v1
 tags:
   - name: Items
-    description: MercadoLibre example endpoitrs
-  - name: Examples
-    description: Simple example endpoints
+    description: MercadoLibre example endpoints
   - name: Specification
     description: The swagger API specification
 paths:
   /items:
-    get:
+    post:
       tags:
         - Items
       description: Query for results
@@ -25,15 +23,22 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        description: author of the request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
       responses:
-        200:
+        '200':
           description: Returns all results
-          content: {}
-        404:
+        '404':
           description: No results found
-          content: {}
+        '401':
+          description: Unauthorized
   /items/{id}:
-    get:
+    post:
       tags:
         - Items
       parameters:
@@ -43,71 +48,50 @@ paths:
           required: true
           schema:
             type: string
-      responses:
-        200:
-          description: Return the item with the specified id
-          content: {}
-        204:
-          description: Item not found
-          content: {}
-  /examples:
-    get:
-      tags:
-        - Examples
-      description: Fetch all examples
-      responses:
-        200:
-          description: Returns all examples
-          content: {}
-    post:
-      tags:
-        - Examples
-      description: Create a new example
       requestBody:
-        description: an example
+        description: author of the request
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExampleBody'
-        required: true
+              $ref: '#/components/schemas/Author'
       responses:
-        200:
-          description: Returns all examples
-          content: {}
-  /examples/{id}:
-    get:
-      tags:
-        - Examples
-      parameters:
-        - name: id
-          in: path
-          description: The id of the example to retrieve
-          required: true
-          schema:
-            type: integer
-      responses:
-        200:
-          description: Return the example with the specified id
-          content: {}
-        404:
-          description: Example not found
-          content: {}
+        '200':
+          description: Return the item with the specified id
+        '204':
+          description: Item not found
+        '401':
+          description: Unauthorized
   /spec:
     get:
       tags:
         - Specification
       responses:
-        200:
+        '200':
           description: Return the API specification
-          content: {}
 components:
   schemas:
-    ExampleBody:
-      title: example
-      required:
-        - name
+    Author:
       type: object
       properties:
-        name:
-          type: string
-          example: no_stress
+        author:
+          type: object
+          properties:
+            name:
+              type: string
+            lastName:
+              type: string
+          example:
+            name: Lautaro
+            lastName: Tejerina
+          required:
+            - name
+            - lastName
+  requestBodies:
+    AuthBody:
+      description: author of the request
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Author'

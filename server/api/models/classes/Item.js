@@ -6,12 +6,15 @@ const conditions = {
   used: 'Usado',
 };
 
-const mapDetailsDescriptionToItem = (
+const mapRootpathToCategories = pathFromRoot => pathFromRoot.name;
+
+const mapDetailsToItem = (
   {
     id, title, price, thumbnail, condition, shipping: { free_shipping }, sold_quantity,
   },
   { plain_text },
   { symbol },
+  { path_from_root },
 ) => new Item(
   id,
   title,
@@ -21,10 +24,21 @@ const mapDetailsDescriptionToItem = (
   free_shipping,
   sold_quantity,
   plain_text,
+  path_from_root.map(mapRootpathToCategories),
 );
 
 export default class Item {
-  constructor(id, title, price, picture, condition, free_shipping, sold_quantity, description) {
+  constructor(
+    id,
+    title,
+    price,
+    picture,
+    condition,
+    free_shipping,
+    sold_quantity,
+    description,
+    categories,
+  ) {
     this.id = id;
     this.title = title;
     this.price = price;
@@ -33,7 +47,8 @@ export default class Item {
     this.free_shipping = free_shipping;
     this.sold_quantity = sold_quantity;
     this.description = description;
+    this.categories = categories;
   }
 }
 
-export { Item, mapDetailsDescriptionToItem };
+export { Item, mapDetailsToItem };

@@ -5,5 +5,5 @@ import authHandler from '../../middlewares/auth.handler';
 export default express
   .Router()
   .use(authHandler)
-  .get('/', controller.search)
-  .get('/:id', controller.retrieve);
+  .post('/', controller.search)
+  .post('/:id', controller.retrieve);

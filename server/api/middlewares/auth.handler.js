@@ -1,12 +1,19 @@
-// eslint-disable-next-line no-unused-vars, no-shadow
-import L from '../../common/logger';
+import AuthService from '../services/auth.service';
 
 export default function authHandler(req, res, next) {
-  const author = {
-    name: 'Lautaro',
-    lastName: 'Tejerina',
-  };
-  L.info(req, 'incoming req');
-  res.append('X-Author', author);
+  const author = req.body.author || req.cookies.author;
+  let message = 'Authorized';
+
+  if (!author) {
+    message = 'Unauthorized: No author provided';
+    req.log.error(message);
+    res.status(401).end(message);
+  } else if (!AuthService.auth(author)) {
+    message = 'Unauthorized: Author incorrect';
+    req.log.error(message);
+    res.status(401).end(message);
+  }
+
+  req.log.debug(message);
   next();
 }

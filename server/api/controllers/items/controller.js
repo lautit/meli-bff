@@ -1,28 +1,27 @@
 import ItemsService from '../../services/items.service';
-
-import L from '../../../common/logger';
+import AuthService from '../../services/auth.service';
 
 export class Controller {
   async search(req, res) {
-    L.debug(`searching ${req.query.q}`);
-
     const r = await ItemsService.search(req.query.q);
-    r.author = res.get('X-Author');
+    const author = AuthService.getAuthor();
     if (r) {
-      res.json(r);
+      req.log.info('searched');
+      res.json({ ...r, author });
     } else {
+      req.log.error('error searching');
       res.status(404).end();
     }
   }
 
   async retrieve(req, res) {
-    L.debug(`retrieving ${req.params.id}`);
-
     const r = await ItemsService.retrieve(req.params.id);
-    r.author = res.get('X-Author');
+    const author = AuthService.getAuthor();
     if (r) {
-      res.json(r);
+      res.log.info('retrieved');
+      res.json({ ...r, author });
     } else {
+      res.log.error('error retrieving');
       res.status(204).end();
     }
   }
